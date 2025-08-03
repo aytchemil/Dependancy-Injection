@@ -1,11 +1,8 @@
-# Ignore everything
 *
-
-# Don't ignore .gitignore itself
 !.gitignore
 
-# Don't ignore the folder
-!Dependancy Injection System/
-
-# Don't ignore everything inside it (files and subfolders)
-!Dependancy Injection System/**/*
+# Allow the whole path down to the target folder
+!Dependency Injection/
+!Dependency Injection/Assets/
+!Dependency Injection/Assets/Dependancy Injection System/
+!Dependency Injection/Assets/Dependancy Injection System/**/*
