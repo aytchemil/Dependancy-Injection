@@ -1,5 +1,4 @@
 ﻿using System;
-using UnityEngine;
 
 namespace DependancyInjection
 {
@@ -16,17 +15,9 @@ namespace DependancyInjection
         public ProvideAttribute() { }
     }
 
-    
 
-    public class ClassA : MonoBehaviour
-    {
-
-    }
-
-    public class ClassB : MonoBehaviour
-    {
-
-    }
+    //Marker Interface
+    public interface IDependencyProvider { }
 
 
     public class Injector
@@ -35,7 +26,6 @@ namespace DependancyInjection
 
 
     }
-
 
 
 
