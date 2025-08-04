@@ -49,17 +49,71 @@ namespace DependencyInjection
         {
             base.Awake();
 
-
-            //Find all modules implementing IDependancyProvider
+            // Providing Dependancies
+            // 1 Find all modules implementing IDependancyProvider
             var providers = FindMonoBehaviors().OfType<IDependencyProvider>();
 
-            //Register each found IDependencyProvider into our dictionary
+            // 2 Register each found IDependencyProvider into our dictionary
             foreach (var provider in providers)
             {
                 RegisterProvider(provider);
             }
             Debug.Log($"Registered all Providers");
 
+
+            // Field Injection
+            //  1 Find all Injectable Objects and inject their dependancies
+
+            //      a Grabs a list of Monobehaviors where they have injectable members
+            var injectables = FindMonoBehaviors().Where(IsInjectable);
+            foreach(var injectable in injectables)
+            {
+                //Inject at each injectable monobehaviour
+                Inject(injectable);
+            }
+            Debug.Log($"Injected all Fields");
+
+
+        }
+
+        void Inject(object injectable)
+        {
+            var type = injectable.GetType();
+
+            Debug.Log($"Injecting into {type.Name} containing injectable fields");
+
+            var injectableFields = type.GetFields(k_bindingFlags)
+                .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
+
+            foreach(var injectableField in injectableFields)
+            {
+                var fieldType = injectableField.FieldType;
+                Debug.Log($"Injecting into Injectable Field {fieldType.Name}");
+
+                var resolvedInstance = Resolve(fieldType);
+                if (resolvedInstance == null)
+                    throw new Exception($"Failed to resolve {fieldType.Name} for {type.Name}");
+
+                injectableField.SetValue(injectable, resolvedInstance);
+                Debug.Log($"Injected {fieldType.Name} into {type.Name}");
+            }
+        }
+
+        object Resolve(Type type)
+        {
+            registry.TryGetValue(type, out var resolvedInstance);
+            return resolvedInstance;
+        }
+
+        // Helper Function Purpose:
+        // TRUE/FALSE if a monobehavior contains any members marked with [Inject]
+        static bool IsInjectable(MonoBehaviour obj)
+        {
+            //Grab all fields with the correct binding flags
+            var members = obj.GetType().GetMembers(k_bindingFlags);
+            
+            //Grab & Return the members marked with [Inject] 
+            return members.Any(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
         }
 
         //Purpose: Every IDependencyProvider passed into (RegisterProvider) most likely has a method or field
