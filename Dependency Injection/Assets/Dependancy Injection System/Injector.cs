@@ -82,7 +82,7 @@ namespace DependencyInjection
         {
             var type = injectable.GetType();
 
-            Debug.Log($"Injecting into {type.Name} containing injectable fields");
+            //Debug.Log($"Injecting into {type.Name} containing injectable fields");
 
             var injectableFields = type.GetFields(k_bindingFlags)
                 .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
@@ -90,11 +90,11 @@ namespace DependencyInjection
             foreach(var injectableField in injectableFields)
             {
                 var fieldType = injectableField.FieldType;
-                Debug.Log($"Injecting into Injectable Field {fieldType.Name}");
+                //Debug.Log($"Field Injecting into Injectable Field {fieldType.Name} into {type.Name}");
 
                 var resolvedInstance = Resolve(fieldType);
                 if (resolvedInstance == null)
-                    throw new Exception($"Failed to resolve {fieldType.Name} for {type.Name}");
+                    throw new Exception($"Failed to resolve {fieldType.Name} into {type.Name}");
 
                 injectableField.SetValue(injectable, resolvedInstance);
                 Debug.Log($"Field Injected {fieldType.Name} into {type.Name}");
@@ -105,6 +105,8 @@ namespace DependencyInjection
 
             foreach(var injectableMethod in injectableMethods)
             {
+                //Debug.Log($"Method Injecting into Injectable Field {injectableMethod.Name} into {type.Name}");
+
                 var requiredParameters = injectableMethod.GetParameters()
                     .Select(parameter => parameter.ParameterType)
                     .ToArray();

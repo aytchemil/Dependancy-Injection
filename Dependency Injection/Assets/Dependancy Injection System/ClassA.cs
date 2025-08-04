@@ -8,8 +8,6 @@ namespace DependencyInjection
         //Field To Hold ServiceA
         ServiceA serviceA;
 
-
-
         //Accepts an Injection and Assigns it to the field
         [Inject]
         public void Init(ServiceA serviceA)
@@ -17,16 +15,14 @@ namespace DependencyInjection
             this.serviceA = serviceA;
         }
 
+        [Inject]
+        SelfInjectClass someDependency;
+
         private void Start()
         {
             serviceA.Initialize("ServiceA initialized from ClassA");
+            someDependency.Initialize();
         }
-
-
-
-
-
-
     }
 
 
