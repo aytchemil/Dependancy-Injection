@@ -14,6 +14,14 @@ namespace DependencyInjection
             this.factoryA = factoryA;
         }
 
+
+
+        private void Start()
+        {
+            serviceA.Initialize("ServiceA initialized from ClassB");
+            serviceB.Initialize("ServiceB initialized from ClassB");
+            factoryA.CreatedServiceA().Initialize("ServiceA initialized from FactoryA");
+        }
     }
 
 

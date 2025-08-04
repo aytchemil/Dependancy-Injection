@@ -61,7 +61,7 @@ namespace DependencyInjection
     {
         ServiceA cachedServiceA;
 
-        public ServiceA CreatedService()
+        public ServiceA CreatedServiceA()
         {
             if(cachedServiceA == null)
                 cachedServiceA = new ServiceA();

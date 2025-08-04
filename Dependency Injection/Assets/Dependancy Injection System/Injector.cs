@@ -74,6 +74,8 @@ namespace DependencyInjection
             Debug.Log($"Injected all Fields");
 
 
+
+
         }
 
         void Inject(object injectable)
@@ -95,7 +97,24 @@ namespace DependencyInjection
                     throw new Exception($"Failed to resolve {fieldType.Name} for {type.Name}");
 
                 injectableField.SetValue(injectable, resolvedInstance);
-                Debug.Log($"Injected {fieldType.Name} into {type.Name}");
+                Debug.Log($"Field Injected {fieldType.Name} into {type.Name}");
+            }
+
+            var injectableMethods = type.GetMethods(k_bindingFlags)
+                .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
+
+            foreach(var injectableMethod in injectableMethods)
+            {
+                var requiredParameters = injectableMethod.GetParameters()
+                    .Select(parameter => parameter.ParameterType)
+                    .ToArray();
+
+                var resolvedInstances = requiredParameters.Select(Resolve).ToArray();
+                if(resolvedInstances.Any(resolvedInstance => resolvedInstance == null))
+                    throw new Exception($"Failed to Inject {type.Name}.{injectableMethod.Name}");
+
+                injectableMethod.Invoke(injectable, resolvedInstances);
+                Debug.Log($"Method Injected {type.Name}.{injectableMethod.Name}");
             }
         }
 
