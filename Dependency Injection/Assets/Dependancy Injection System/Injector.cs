@@ -12,21 +12,14 @@ namespace DependencyInjection
     // - Any Method or Field marked with the [Inject] Attribute we expect that dependency to be satisfied
     //   by our system
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method)]
-    public sealed class InjectAttribute : Attribute
-    {
-        public InjectAttribute() { }
-
-    }
+    public sealed class InjectAttribute : Attribute { }
 
 
 
     //Purpose:
     // - Any method marked with the [Provide] Attribute we expect to supply an instance of a dependancy
     [AttributeUsage(AttributeTargets.Method)]
-    public sealed class ProvideAttribute : Attribute
-    { 
-        public ProvideAttribute() { }
-    }
+    public sealed class ProvideAttribute : Attribute { }
 
 
     //Marker Interface
@@ -171,6 +164,7 @@ namespace DependencyInjection
                     throw new Exception($"Provider {provider.GetType().Name} returned null for {returnType.Name}");
             }
         }
+
 
         //Helper Method:
         // Purpose: Return us all of the Monobehaviors in the scene

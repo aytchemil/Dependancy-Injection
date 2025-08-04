@@ -15,13 +15,16 @@ namespace DependencyInjection
             this.serviceA = serviceA;
         }
 
-        [Inject]
-        SelfInjectClass someDependency;
+        [Inject] SelfInjectClass someDependency;
+        [Inject] ISomeInjectionClass someService;
+
+
 
         private void Start()
         {
             serviceA.Initialize("ServiceA initialized from ClassA");
             someDependency.Initialize();
+            someService.Initialize();
         }
     }
 
