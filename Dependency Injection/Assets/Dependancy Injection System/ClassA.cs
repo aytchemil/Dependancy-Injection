@@ -1,11 +1,21 @@
 ﻿using UnityEngine;
 using System;
 
-namespace DependancyInjection
+namespace DependencyInjection
 {
     public class ClassA : MonoBehaviour
     {
+        //Field To Hold ServiceA
+        ServiceA serviceA;
 
+
+
+        //Accepts an Injection and Assigns it to the field
+        [Inject]
+        public void Init(ServiceA serviceA)
+        {
+            this.serviceA = serviceA;
+        }
 
 
 

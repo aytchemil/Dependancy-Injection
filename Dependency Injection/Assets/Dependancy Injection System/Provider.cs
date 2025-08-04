@@ -1,9 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-namespace DependancyInjection
+namespace DependencyInjection
 {
     //Purpose: Supplying Dependancies
+    // Have as many providers as you want
     public class Provider : MonoBehaviour, IDependencyProvider
     {
         //Dependancies
